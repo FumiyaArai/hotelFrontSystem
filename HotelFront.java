@@ -1,33 +1,24 @@
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-import java.util.Map;
-import java.util.HashMap;
-import java.io.IOException;
 
 class HotelFront
 {
-    // ホテル予約状態_配列
-    Map<Integer, Room> hotel = new HashMap<>();
-
-    // クラスのオブジェクトを生成
-    Room room101 = new Room(101, "");
-    Room room102 = new Room(102, "");
-    Room room103 = new Room(103, "");
-
-    // Mapにキーと値を格納
-    //hotel.put(101, null);
-    //hotel.put(102, null);
-    //hotel.put(103, null);
+	// クラスの配列
+	public static List<Room> roomList = new ArrayList<>();
 
     public static void main(String args[])
     {
+    	// リストに部屋を作る
+    	roomList.add(0, new Room(101, "未予約"));
+    	roomList.add(1, new Room(102, "未予約"));
+    	roomList.add(2, new Room(103, "未予約"));
+
         while(true)
         {
             // 挨拶
             System.out.println("ようこそ Rushout ホテルへ！\r\nやりたいことを次の番号から選んで下さい。\r\n\r\n1）部屋予約\r\n2）予約確認\r\n3）チェックイン\r\n4）チェックアウト\r\n0）システムシャットダウン(全ての情報が削除されます)");
-        
+
             // メニュー選択
             int menuNumber = 0;
 
@@ -50,7 +41,7 @@ class HotelFront
             switch(menuNumber)
             {
                 case 1:
-                System.out.println("部屋予約をします。");
+                System.out.println("部屋予約をします。\r\n");
                 reserve();
                 break;
 
@@ -86,47 +77,75 @@ class HotelFront
         }
     }
 
-
     // 部屋予約メソッド
     public static void reserve()
     {
         // ホテル選択
-        int hotelNumber = 0;
-        Room reserveRoom = null;
+        int reserveHotelNumber = 0;
 
-        // 部屋予約メニュー
-        while(true)
+        // 入力_インスタンス化
+        Scanner scan = new Scanner(System.in);
+
+        try
         {
-            // 入力_インスタンス化
-            Scanner scan = new Scanner(System.in);
+            // 部屋番号入力
+            System.out.print("部屋番号(半角)：");
+            reserveHotelNumber = scan.nextInt();
 
-            try
+            // 部屋が存在するか調べる
+            for(Room searchRoom : roomList)
             {
-                // 部屋番号入力
-                System.out.print("部屋番号(半角)：");
-                hotelNumber = scan.nextInt();
-                
-                // Roomクラスを呼び出してステータスを変更する
-                reserveRoom = HotelFront.hotel.get(hotelNumber);
-                reserveRoom.roomStatus = "予約中";
-            }
-            catch (Exception e)
-            {
-                // エラー分
-                System.out.println("入力された部屋はありません。\r\n最初からやり直して下さい。");
-            }
+            	// 入力した部屋番号と一致する部屋番号があるか調べる
+            	if(reserveHotelNumber == searchRoom.roomNumber)
+            	{
+            		// 既に予約されていないか調べる
+            		if(searchRoom.roomStatus == "予約済")
+            		{
+            			System.out.println("部屋番号" + reserveHotelNumber + "は既に予約済です。\r\nメニュー選択に戻ります。\r\n\r\n");
+            			// 繰り返しを抜ける
+                		break;
+            		}
 
-            // 繰り返しを抜ける
-            break;
+            		// Roomクラスを呼び出してステータスを変更する
+                    searchRoom.roomStatus = "予約済";
+
+                    // ステータス変更したことを通知する
+                    System.out.println("部屋番号" + reserveHotelNumber + "号室が予約されました。\r\nメニュー選択に戻ります。\r\n\r\n");
+
+                    // 繰り返しを抜ける
+            		break;
+            	}
+            }
+        }
+        catch (Exception e)
+        {
+            // エラー分
+            System.out.println("入力された部屋はありません。\r\n最初からやり直して下さい。");
         }
     }
 
     // 予約確認メソッド
     public static void reserveCheck()
     {
-        System.out.println("い");
+    	// ホテル選択
+        int reserveCheckHotelNumber = 0;
+
+    	// 入力_インスタンス化
+        Scanner scan = new Scanner(System.in);
+
+        try
+        {
+        	// 部屋番号入力
+            System.out.print("部屋番号(半角)：");
+            reserveCheckHotelNumber = scan.nextInt();
+        }
+        catch (Exception e)
+        {
+            // エラー分
+            System.out.println("入力された部屋はありません。\r\n最初からやり直して下さい。");
+        }
     }
-    
+
     // チェックインメソッド
     public static void checkIn()
     {
