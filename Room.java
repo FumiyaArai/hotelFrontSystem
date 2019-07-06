@@ -1,7 +1,8 @@
 public class Room
 {
-    // 部屋情報の初期化
+    // 部屋番号
     int roomNumber;
+    // 部屋の予約状態（ステータス）
     String roomStatus;
 
     // コンストラクタ
